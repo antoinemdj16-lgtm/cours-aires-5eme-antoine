@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Périmètres et Aires - 5ème</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #09090f;
+  --s1:      #0f1019;
+  --s2:      #141522;
+  --border:  #1f2138;
+  --txt:     #eceef8;
+  --muted:   #5c6180;
+  --soft:    #9095b8;
+
+  --lime:    #a8ff6e;
+  --lime-d:  rgba(168,255,110,0.08);
+  --lime-b:  rgba(168,255,110,0.18);
+  --sky:     #5eb8ff;
+  --sky-d:   rgba(94,184,255,0.08);
+  --sky-b:   rgba(94,184,255,0.2);
+  --amber:   #ffbe3d;
+  --amber-d: rgba(255,190,61,0.08);
+  --amber-b: rgba(255,190,61,0.2);
+  --rose:    #ff6b8a;
+  --rose-d:  rgba(255,107,138,0.08);
+  --rose-b:  rgba(255,107,138,0.2);
+  --violet:  #a07dff;
+  --violet-d:rgba(160,125,255,0.08);
+  --violet-b:rgba(160,125,255,0.2);
+  --teal:    #3fffd2;
+  --teal-d:  rgba(63,255,210,0.08);
+  --teal-b:  rgba(63,255,210,0.2);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse 70% 40% at 85% 5%,  rgba(160,125,255,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 5%  95%,  rgba(255,190,61,0.03) 0%, transparent 60%);
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  position:fixed; left:0; top:0; bottom:0; width:220px;
+  background:var(--s1); border-right:1px solid var(--border);
+  padding:28px 0; z-index:100; overflow-y:auto;
+}
+.sidebar::-webkit-scrollbar { width:3px; }
+.sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+
+.logo { padding:0 20px 22px; border-bottom:1px solid var(--border); margin-bottom:14px; }
+.logo-eyebrow { font-size:9px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--violet); margin-bottom:6px; }
+.logo-title { font-family:'Instrument Serif', serif; font-size:22px; color:var(--txt); line-height:1.15; }
+.logo-level { font-size:11px; color:var(--muted); margin-top:3px; }
+
+.nav-group { margin-bottom:6px; }
+.nav-label { font-size:8.5px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--muted); padding:0 20px; margin-bottom:4px; display:block; }
+.nlink {
+  display:flex; align-items:center; gap:9px;
+  padding:7px 20px; font-size:12.5px; font-weight:500;
+  color:var(--muted); text-decoration:none;
+  transition:all 0.15s; border-left:2px solid transparent;
+}
+.nlink:hover, .nlink.on { color:var(--txt); border-left-color:var(--violet); background:rgba(160,125,255,0.04); }
+.nd { width:5px; height:5px; border-radius:50%; background:var(--border); flex-shrink:0; transition:background 0.15s; }
+.nlink:hover .nd, .nlink.on .nd { background:var(--violet); }
+
+/* ─── MAIN ─── */
+.main { margin-left:220px; }
+
+/* ─── HERO ─── */
+.hero {
+  padding:72px 60px 56px;
+  border-bottom:1px solid var(--border);
+  position:relative; overflow:hidden;
+  background:linear-gradient(145deg, #0c090f 0%, var(--bg) 100%);
+}
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, transparent 1px, transparent 64px, rgba(255,255,255,0.012) 65px),
+    repeating-linear-gradient(0deg,  rgba(255,255,255,0.012) 0px, transparent 1px, transparent 64px, rgba(255,255,255,0.012) 65px);
+  pointer-events:none;
+}
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:7px;
+  background:var(--violet-d); border:1px solid var(--violet-b);
+  color:var(--violet); font-size:10px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  padding:5px 12px; border-radius:6px; margin-bottom:22px;
+}
+.hero-eyebrow::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--violet); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+.hero h1 { font-family:'Instrument Serif', serif; font-size:60px; line-height:1.0; color:var(--txt); margin-bottom:16px; position:relative; z-index:1; }
+.hero h1 em { color:var(--violet); font-style:italic; }
+
+.hero-desc { font-size:15.5px; color:var(--soft); max-width:520px; line-height:1.65; margin-bottom:30px; }
+.hero-desc strong { color:var(--txt); font-weight:600; }
+
+.obj-row { display:flex; gap:8px; flex-wrap:wrap; }
+.obj-chip { padding:6px 13px; border-radius:6px; background:var(--s2); border:1px solid var(--border); font-size:12px; font-weight:500; color:var(--soft); display:flex; align-items:center; gap:6px; }
+.hero-deco {
+  position:absolute; right:56px; top:50%; transform:translateY(-50%);
+  font-family:'Instrument Serif', serif; font-style:italic;
+  font-size:140px; color:rgba(160,125,255,0.04);
+  user-select:none; pointer-events:none; line-height:1;
+}
+
+/* ─── CONTENT ─── */
+.content { padding:52px 60px 100px; max-width:920px; }
+
+/* ─── SECTION ─── */
+.section { margin-bottom:60px; }
+.sec-hdr { display:flex; align-items:flex-start; gap:18px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+.sec-n { font-family:'DM Mono', monospace; font-size:11px; font-weight:500; color:var(--violet); background:var(--violet-d); border:1px solid var(--violet-b); padding:3px 8px; border-radius:5px; margin-top:5px; white-space:nowrap; }
+.sec-title { font-family:'Instrument Serif', serif; font-size:28px; color:var(--txt); line-height:1.15; }
+.sec-sub { font-size:12px; color:var(--muted); margin-top:3px; }
+
+p { font-size:15px; line-height:1.75; margin-bottom:10px; }
+
+/* ─── CARDS ─── */
+.card { border-radius:10px; padding:18px 22px; margin:14px 0; border:1px solid; }
+.card::before { display:block; font-size:8.5px; font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:10px; }
+.cdef  { background:var(--sky-d);    border-color:var(--sky-b);    } .cdef::before  { content:'DEFINITION'; color:var(--sky);    }
+.cmet  { background:var(--violet-d); border-color:var(--violet-b); } .cmet::before  { content:'METHODE';    color:var(--violet); }
+.cex   { background:var(--teal-d);   border-color:var(--teal-b);   } .cex::before   { content:'EXEMPLE';    color:var(--teal);   }
+.cwarn { background:var(--rose-d);   border-color:var(--rose-b);   } .cwarn::before { content:'ATTENTION';  color:var(--rose);   }
+.ctip  { background:var(--amber-d);  border-color:var(--amber-b);  } .ctip::before  { content:'ASTUCE';     color:var(--amber);  }
+.clife { background:var(--lime-d);   border-color:var(--lime-b);   } .clife::before { content:'VIE REELLE'; color:var(--lime);   }
+.chist { background:rgba(255,190,61,0.06); border-color:var(--amber-b); } .chist::before { content:'CULTURE MATHS'; color:var(--amber); }
+
+/* ─── FORMULA BOX ─── */
+.fbox { display:flex; gap:16px; margin:16px 0; flex-wrap:wrap; }
+.fcard {
+  flex:1; min-width:180px;
+  background:var(--s2); border:1px solid var(--border);
+  border-radius:10px; padding:18px 20px; text-align:center;
+  transition:border-color 0.2s;
+}
+.fcard:hover { border-color:var(--violet); }
+.fcard-title { font-size:9px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+.fcard-formula { font-family:'DM Mono'; font-size:14px; color:var(--violet); font-weight:500; margin-top:8px; }
+.fcard-formula2 { font-family:'DM Mono'; font-size:13px; color:var(--teal); font-weight:500; margin-top:4px; }
+
+/* ─── SVG SHAPES ─── */
+.shape-rect { fill:rgba(63,255,210,0.12); stroke:var(--teal); stroke-width:1.5; }
+.shape-sq   { fill:rgba(94,184,255,0.12); stroke:var(--sky);  stroke-width:1.5; }
+.shape-tri  { fill:rgba(160,125,255,0.12); stroke:var(--violet); stroke-width:1.5; }
+.shape-para { fill:rgba(255,190,61,0.12); stroke:var(--amber); stroke-width:1.5; }
+.shape-circ { fill:rgba(168,255,110,0.10); stroke:var(--lime); stroke-width:1.5; }
+.shape-lbl  { font-family:'DM Mono'; font-size:10px; fill:var(--soft); }
+
+/* ─── CONVERSION TABLE ─── */
+.conv-scroll { overflow-x:auto; margin:16px 0; }
+.conv-table { border-collapse:collapse; font-family:'DM Mono'; font-size:12px; min-width:680px; border-radius:10px; overflow:hidden; }
+.conv-table th { background:var(--s2); border:1px solid var(--border); padding:8px 10px; text-align:center; color:var(--muted); font-size:10px; font-weight:500; }
+.conv-table td { border:1px solid var(--border); padding:8px 12px; text-align:center; background:var(--s1); font-size:13px; color:var(--txt); min-width:70px; height:42px; vertical-align:middle; }
+.conv-table td.hi { color:var(--teal); font-weight:700; background:var(--teal-d); }
+.conv-table td.hi2 { color:var(--violet); font-weight:700; background:var(--violet-d); }
+.conv-table td.sep { background:var(--border); padding:0 4px; min-width:28px; }
+
+/* ─── STEPS ─── */
+.steps { background:var(--s2); border:1px solid var(--border); border-radius:9px; padding:16px 20px; margin:12px 0; font-family:'DM Mono', monospace; font-size:13.5px; }
+.sr { display:grid; grid-template-columns:150px 1fr; gap:12px; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04); align-items:baseline; }
+.sr:last-child { border-bottom:none; }
+.slbl { color:var(--muted); font-size:10.5px; padding-top:2px; }
+.seq .h { color:var(--violet); font-weight:500; }
+.seq .ok { color:var(--teal); }
+
+/* ─── EXERCISE ─── */
+.exblk { background:var(--s1); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:18px 0; }
+.exhdr { display:flex; align-items:center; justify-content:space-between; padding:13px 22px; border-bottom:1px solid var(--border); background:var(--s2); }
+.extitle { font-size:14px; font-weight:700; color:var(--txt); }
+.badge { font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:3px 9px; border-radius:5px; }
+.beasy { background:var(--teal-d); color:var(--teal); border:1px solid var(--teal-b); }
+.bmid  { background:var(--amber-d); color:var(--amber); border:1px solid var(--amber-b); }
+.bhard { background:var(--rose-d);  color:var(--rose);  border:1px solid var(--rose-b); }
+
+.exbody { padding:18px 22px; }
+.exol { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.exol li { display:flex; align-items:baseline; gap:12px; padding:9px 13px; background:var(--s2); border-radius:7px; font-size:14px; }
+.exnum { font-family:'DM Mono'; font-size:11px; font-weight:500; color:var(--violet); min-width:20px; }
+
+/* ─── CORRECTION ─── */
+.corrBtn {
+  display:inline-flex; align-items:center; gap:6px;
+  margin-top:12px; padding:7px 14px; border-radius:7px;
+  background:transparent; border:1px solid var(--border);
+  color:var(--muted); font-family:'Plus Jakarta Sans';
+  font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+  cursor:pointer; transition:all 0.2s;
+}
+.corrBtn:hover { border-color:var(--violet); color:var(--violet); }
+.corrPanel { display:none; margin-top:12px; padding:14px 18px; background:var(--violet-d); border:1px solid var(--violet-b); border-radius:8px; font-family:'DM Mono'; font-size:13px; line-height:2; }
+.corrPanel.on { display:block; animation:fu 0.2s ease; }
+@keyframes fu { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+.cl2 { display:flex; gap:14px; align-items:baseline; padding:2px 0; }
+.cn2 { color:var(--violet); font-weight:500; min-width:70px; }
+.ce  { color:var(--txt); }
+
+/* ─── CHECKLIST ─── */
+.cl { list-style:none; display:flex; flex-direction:column; gap:8px; margin:10px 0; }
+.cl li { display:flex; align-items:flex-start; gap:11px; font-size:14.5px; }
+.cn { width:22px; height:22px; border-radius:5px; background:var(--violet-d); border:1px solid var(--violet-b); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--violet); flex-shrink:0; margin-top:2px; font-family:'DM Mono'; font-weight:500; }
+.al { list-style:none; display:flex; flex-direction:column; gap:7px; margin:10px 0; }
+.al li { display:flex; gap:10px; font-size:14.5px; line-height:1.6; }
+.al li::before { content:'→'; color:var(--amber); font-family:'DM Mono'; flex-shrink:0; margin-top:1px; }
+
+/* ─── QUIZ ─── */
+.qblk { background:var(--s2); border:1px solid var(--border); border-radius:9px; padding:16px 20px; margin-bottom:12px; }
+.qtext { font-size:14px; margin-bottom:12px; font-weight:500; line-height:1.5; }
+.qeq { font-family:'DM Mono'; color:var(--sky); font-size:14px; }
+.qopts { display:flex; gap:8px; flex-wrap:wrap; }
+.qopt { padding:7px 16px; border-radius:7px; background:var(--s1); border:1px solid var(--border); color:var(--txt); font-family:'DM Mono'; font-size:13px; cursor:pointer; transition:all 0.15s; }
+.qopt:hover { border-color:var(--violet); color:var(--violet); }
+.qopt.sel  { border-color:var(--violet); background:var(--violet-d); color:var(--violet); }
+.qopt.good { border-color:var(--teal);   background:var(--teal-d);   color:var(--teal); }
+.qopt.bad  { border-color:var(--rose);   background:var(--rose-d);   color:var(--rose); }
+.qopt:disabled { cursor:not-allowed; }
+.qsubmit { display:inline-flex; align-items:center; gap:8px; margin-top:16px; padding:11px 28px; border-radius:8px; background:var(--violet); border:none; color:var(--bg); font-family:'Plus Jakarta Sans'; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; transition:opacity 0.2s; }
+.qsubmit:hover { opacity:0.88; }
+.qsubmit:disabled { opacity:0.35; cursor:not-allowed; }
+.qresult { display:none; margin-top:16px; padding:22px; border-radius:10px; text-align:center; }
+.qresult.on { display:block; animation:fu 0.3s ease; }
+.rscore { font-family:'Instrument Serif'; font-size:60px; line-height:1; margin-bottom:8px; }
+.rbar { height:5px; border-radius:3px; background:var(--border); margin:14px 0; overflow:hidden; }
+.rbarfill { height:100%; border-radius:3px; transition:width 0.8s ease; }
+.rmsg { font-size:14px; color:var(--soft); }
+
+/* ─── MISC ─── */
+.divider { height:1px; background:var(--border); margin:52px 0; }
+strong { font-weight:700; }
+.mono { font-family:'DM Mono'; font-size:13px; }
+.pi { font-style:italic; font-family:'Instrument Serif'; font-size:16px; }
+
+/* ─── RAND TRAINING ─── */
+.rand-box { background:var(--s2); border:1px solid var(--border); border-radius:10px; padding:22px; margin:14px 0; }
+.rand-display { font-family:'DM Mono'; font-size:16px; color:var(--txt); text-align:center; padding:18px; background:var(--s1); border-radius:8px; margin-bottom:14px; min-height:60px; display:flex; align-items:center; justify-content:center; }
+.rand-btns { display:flex; gap:10px; flex-wrap:wrap; }
+.rand-btn { padding:8px 18px; border-radius:7px; border:1px solid var(--border); background:transparent; color:var(--muted); font-family:'Plus Jakarta Sans'; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; transition:all 0.2s; }
+.rand-btn:hover { border-color:var(--violet); color:var(--violet); }
+.rand-corr { display:none; margin-top:12px; padding:14px 18px; background:var(--violet-d); border:1px solid var(--violet-b); border-radius:8px; font-family:'DM Mono'; font-size:13px; line-height:2; }
+.rand-corr.on { display:block; animation:fu 0.2s ease; }
+
+/* ─── FEEDBACK ─── */
+.note-chip { display:inline-block; padding:7px 14px; border-radius:7px; border:1px solid var(--border); background:var(--s2); color:var(--soft); font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.fb-textarea { width:100%; background:var(--s2); border:1px solid var(--border); border-radius:8px; padding:12px 16px; color:var(--txt); font-family:'Plus Jakarta Sans'; font-size:14px; resize:vertical; margin-top:10px; }
+.fb-textarea:focus { outline:none; border-color:var(--violet); }
+.fb-submit { margin-top:10px; padding:10px 24px; border-radius:8px; background:var(--violet); border:none; color:var(--bg); font-family:'Plus Jakarta Sans'; font-size:13px; font-weight:800; text-transform:uppercase; cursor:pointer; transition:opacity 0.2s; }
+.fb-submit:hover { opacity:0.85; }
+
+@media (max-width:768px) {
+  .sidebar { display:none; }
+  .main { margin-left:0; }
+  .hero { padding:40px 24px 36px; }
+  .hero h1 { font-size:40px; }
+  .hero-deco { display:none; }
+  .content { padding:28px 20px 60px; }
+  .fbox { flex-direction:column; }
+}
+</style>
+</head>
+<body>
+
+<nav class="sidebar" role="navigation" aria-label="Navigation du cours">
+  <div class="logo">
+    <div class="logo-eyebrow">Mathématiques · 5ème</div>
+    <div class="logo-title">Périmètres<br>& Aires</div>
+    <div class="logo-level">Cours complet + exercices</div>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Le cours</span>
+    <a class="nlink on" href="#s1"><span class="nd"></span>Périmètres (rappels)</a>
+    <a class="nlink" href="#s2"><span class="nd"></span>Unités d'aires</a>
+    <a class="nlink" href="#s3"><span class="nd"></span>Rectangle, carré, triangle</a>
+    <a class="nlink" href="#s4"><span class="nd"></span>Le disque</a>
+    <a class="nlink" href="#s5"><span class="nd"></span>Parallélogramme & triangle</a>
+    <a class="nlink" href="#s6"><span class="nd"></span>Figures complexes</a>
+    <a class="nlink" href="#s7"><span class="nd"></span>Erreurs à éviter</a>
+  </div>
+  <div class="nav-group" style="margin-top:10px;">
+    <span class="nav-label">Pratique</span>
+    <a class="nlink" href="#s8"><span class="nd"></span>Exercices</a>
+    <a class="nlink" href="#s9"><span class="nd"></span>Entraînement</a>
+    <a class="nlink" href="#s10"><span class="nd"></span>Quiz final</a>
+    <a class="nlink" href="#s11"><span class="nd"></span>Synthèse</a>
+    <a class="nlink" href="#sfeedback" style="color:var(--amber);border-left-color:transparent;"><span class="nd" style="background:var(--amber-d);border:1px solid var(--amber-b);"></span>Votre avis</a>
+  </div>
+</nav>
+
+<div class="main">
+
+  <div class="hero">
+    <div class="hero-deco">π r²</div>
+    <div style="font-size:12px;font-weight:700;letter-spacing:1px;color:var(--amber);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="background:var(--amber-d);border:1px solid var(--amber-b);padding:4px 12px;border-radius:6px;">👨‍🏫 Cours de Monsieur JULIEN</span>
+    </div>
+    <div class="hero-eyebrow">Programme officiel 5ème</div>
+    <h1>Périmètres<br>&amp; <em>Aires</em></h1>
+    <p class="hero-desc">Du périmètre d'un simple rectangle à l'aire d'un disque, en passant par les triangles et parallélogrammes — <strong>maîtriser les figures, c'est comprendre le monde qui nous entoure.</strong></p>
+    <div class="obj-row">
+      <div class="obj-chip">📐 Calculer des périmètres</div>
+      <div class="obj-chip">🔢 Convertir les unités d'aire</div>
+      <div class="obj-chip">📏 Aire du disque et du triangle</div>
+      <div class="obj-chip">✅ Figures complexes</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- S1 : PÉRIMÈTRES -->
+    <div class="section" id="s1">
+      <div class="sec-hdr">
+        <div class="sec-n">01</div>
+        <div>
+          <div class="sec-title">Périmètres — Rappels</div>
+          <div class="sec-sub">Rectangle, carré, losange, cercle</div>
+        </div>
+      </div>
+
+      <div class="card cdef">
+        <p>Le <strong>périmètre</strong> d'une figure est la <strong>longueur totale</strong> que l'on parcourt lorsqu'on fait le tour complet de la figure.</p>
+      </div>
+
+      <!-- Tableau des formules périmètres -->
+      <div class="fbox">
+        <div class="fcard">
+          <div class="fcard-title">Rectangle</div>
+          <svg width="100" height="65" viewBox="0 0 100 65" style="margin:8px auto;display:block;">
+            <rect x="8" y="8" width="84" height="44" class="shape-rect"/>
+            <text x="50" y="6" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--soft);">L</text>
+            <text x="4" y="34" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--soft);">l</text>
+            <!-- angles droits -->
+            <polyline points="8,18 18,18 18,8" fill="none" stroke="var(--teal)" stroke-width="0.8"/>
+            <polyline points="84,8 84,18 92,18" fill="none" stroke="var(--teal)" stroke-width="0.8"/>
+            <polyline points="8,42 18,42 18,52" fill="none" stroke="var(--teal)" stroke-width="0.8"/>
+            <polyline points="84,42 84,52 92,52" fill="none" stroke="var(--teal)" stroke-width="0.8"/>
+          </svg>
+          <div class="fcard-formula">P = 2L + 2l</div>
+          <div class="fcard-formula2">ou P = 2 × (L + l)</div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Carré</div>
+          <svg width="70" height="70" viewBox="0 0 70 70" style="margin:8px auto;display:block;">
+            <rect x="8" y="8" width="54" height="54" class="shape-sq"/>
+            <text x="35" y="6" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--soft);">c</text>
+            <!-- tic marks -->
+            <line x1="30" y1="8" x2="35" y2="13" stroke="var(--sky)" stroke-width="1"/>
+            <line x1="35" y1="8" x2="40" y2="13" stroke="var(--sky)" stroke-width="1"/>
+            <line x1="30" y1="62" x2="35" y2="67" stroke="var(--sky)" stroke-width="1"/>
+            <line x1="35" y1="62" x2="40" y2="67" stroke="var(--sky)" stroke-width="1"/>
+          </svg>
+          <div class="fcard-formula">P = 4c</div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Losange</div>
+          <svg width="80" height="70" viewBox="0 0 80 70" style="margin:8px auto;display:block;">
+            <polygon points="40,5 72,35 40,65 8,35" class="shape-para"/>
+            <text x="40" y="4" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--soft);">c</text>
+            <!-- tic marks sur chaque côté -->
+            <line x1="54" y1="18" x2="59" y2="23" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="58" y1="16" x2="63" y2="21" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="54" y1="50" x2="59" y2="45" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="58" y1="52" x2="63" y2="47" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="25" y1="18" x2="20" y2="23" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="21" y1="16" x2="16" y2="21" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="25" y1="50" x2="20" y2="45" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="21" y1="52" x2="16" y2="47" stroke="var(--amber)" stroke-width="1.2"/>
+          </svg>
+          <div class="fcard-formula">P = 4c</div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Cercle</div>
+          <svg width="70" height="70" viewBox="0 0 70 70" style="margin:8px auto;display:block;">
+            <circle cx="35" cy="35" r="28" class="shape-circ"/>
+            <line x1="35" y1="35" x2="63" y2="35" stroke="var(--lime)" stroke-width="1.2"/>
+            <text x="50" y="30" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--lime);">r</text>
+            <circle cx="35" cy="35" r="2" fill="var(--lime)"/>
+          </svg>
+          <div class="fcard-formula">P = 2πr</div>
+          <div class="fcard-formula2">π ≈ 3,14</div>
+        </div>
+      </div>
+
+      <div class="card cex">
+        <p style="margin-bottom:12px;"><strong>Exemples de calcul :</strong></p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="steps" style="margin:0;">
+            <div class="sr"><div class="slbl">Rectangle</div><div class="seq">5,5 cm × 2 cm</div></div>
+            <div class="sr"><div class="slbl">Formule</div><div class="seq"><span class="h">P = 2×5,5 + 2×2</span></div></div>
+            <div class="sr"><div class="slbl">Résultat</div><div class="seq"><span class="ok">P = 15 cm</span></div></div>
+          </div>
+          <div class="steps" style="margin:0;">
+            <div class="sr"><div class="slbl">Carré</div><div class="seq">côté 3,2 cm</div></div>
+            <div class="sr"><div class="slbl">Formule</div><div class="seq"><span class="h">P = 4 × 3,2</span></div></div>
+            <div class="sr"><div class="slbl">Résultat</div><div class="seq"><span class="ok">P = 12,8 cm</span></div></div>
+          </div>
+          <div class="steps" style="margin:0;">
+            <div class="sr"><div class="slbl">Losange</div><div class="seq">côté 3 cm</div></div>
+            <div class="sr"><div class="slbl">Formule</div><div class="seq"><span class="h">P = 4 × 3</span></div></div>
+            <div class="sr"><div class="slbl">Résultat</div><div class="seq"><span class="ok">P = 12 cm</span></div></div>
+          </div>
+          <div class="steps" style="margin:0;">
+            <div class="sr"><div class="slbl">Cercle</div><div class="seq">rayon 3 cm</div></div>
+            <div class="sr"><div class="slbl">Formule</div><div class="seq"><span class="h">P = 2 × π × 3</span></div></div>
+            <div class="sr"><div class="slbl">Résultat</div><div class="seq"><span class="ok">P ≈ 18,84 cm</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card cwarn">
+        <p><strong>Attention !</strong> Le périmètre d'un cercle s'appelle aussi la <strong>circonférence</strong>. Il ne faut pas le confondre avec l'aire du disque (on y reviendra en section 4).</p>
+        <p style="margin-top:6px;font-family:'DM Mono';font-size:13px;">Longueur du cercle : <span style="color:var(--teal);">P = 2πr</span> &nbsp;≠&nbsp; Aire du disque : <span style="color:var(--violet);">A = πr²</span></p>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S2 : UNITÉS D'AIRES -->
+    <div class="section" id="s2">
+      <div class="sec-hdr">
+        <div class="sec-n">02</div>
+        <div>
+          <div class="sec-title">Unités d'aires</div>
+          <div class="sec-sub">Convertir entre mm², cm², dm², m², dam², hm², km²</div>
+        </div>
+      </div>
+
+      <div class="card cdef">
+        <p><strong>1 cm²</strong> est l'aire d'un carré de côté <strong>1 cm</strong>.</p>
+        <p style="margin-top:4px;"><strong>1 km²</strong> est l'aire d'un carré de côté <strong>1 km</strong>.</p>
+        <p style="margin-top:4px;"><strong>4 cm²</strong> est l'aire de 4 carrés de côté 1 cm.</p>
+      </div>
+
+      <p style="margin-bottom:8px;">Pour convertir les unités d'aire, on peut utiliser un <strong>tableau de conversion à double colonne</strong> — car chaque unité se décompose en deux colonnes (dizaines et unités) :</p>
+
+      <div class="conv-scroll">
+        <table class="conv-table">
+          <thead>
+            <tr>
+              <th colspan="2">km²</th>
+              <th colspan="2">hm²<br><span style="font-weight:400;color:var(--muted);font-size:9px;">ou hectare</span></th>
+              <th colspan="2">dam²<br><span style="font-weight:400;color:var(--muted);font-size:9px;">ou are</span></th>
+              <th colspan="2">m²</th>
+              <th colspan="2">dm²</th>
+              <th colspan="2">cm²</th>
+              <th colspan="2">mm²</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td><td></td>  <td></td><td></td>  <td></td><td></td>
+              <td></td><td></td>  <td></td><td></td>
+              <td class="hi"></td><td class="hi" style="position:relative;">1<span style="position:absolute;bottom:4px;right:-4px;font-size:12px;color:var(--teal);font-weight:700;z-index:2;line-height:1;">,</span></td>
+              <td class="hi">0</td><td class="hi">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:4px;">Exemple : 1 cm² = 100 mm²</p>
+
+      <div class="card cmet">
+        <p style="margin-bottom:8px;"><strong>Méthode :</strong> Pour convertir, on place le chiffre dans la colonne de son unité, puis on lit dans la colonne d'arrivée.</p>
+        <ul class="cl">
+          <li><span class="cn">1</span><span>Repérer l'unité de <strong>départ</strong> et l'unité d'<strong>arrivée</strong>.</span></li>
+          <li><span class="cn">2</span><span>Compter le nombre de <strong>cases</strong> à franchir entre les deux unités.</span></li>
+          <li><span class="cn">3</span><span>Chaque case = <strong>×10</strong> (vers les petites unités) ou <strong>÷10</strong> (vers les grandes). Deux cases entre unités consécutives → <strong>×100</strong> ou <strong>÷100</strong>.</span></li>
+        </ul>
+      </div>
+
+      <div class="card cex">
+        <p style="margin-bottom:14px;"><strong>Exemples :</strong></p>
+
+        <!-- a) 1 cm² = 100 mm² : le 1 est dans cm², les 2 zéros dans les 2 colonnes de mm² -->
+        <p style="margin-bottom:6px;font-family:'DM Mono';font-size:13px;color:var(--teal);">a) 1 cm² = 100 mm²</p>
+        <div class="conv-scroll">
+          <table class="conv-table" style="margin-bottom:14px;">
+            <thead><tr><th colspan="2">km²</th><th colspan="2">hm²</th><th colspan="2">dam²</th><th colspan="2">m²</th><th colspan="2">dm²</th><th colspan="2">cm²</th><th colspan="2">mm²</th></tr></thead>
+            <tbody><tr>
+              <td></td><td></td>  <td></td><td></td>  <td></td><td></td>
+              <td></td><td></td>  <td></td><td></td>
+              <td class="hi">0</td><td class="hi" style="position:relative;">1<span style="position:absolute;bottom:4px;right:-4px;font-size:12px;color:var(--teal);font-weight:700;z-index:2;line-height:1;">,</span></td>
+              <td class="hi">0</td><td class="hi">0</td>
+            </tr></tbody>
+          </table>
+        </div>
+
+        <!-- b) 3,4 m² = 34 000 cm² : 3,4 dans les 2 colonnes de m², puis 0 0 0 0 dans dm² et cm² -->
+        <p style="margin-bottom:6px;font-family:'DM Mono';font-size:13px;color:var(--teal);">b) 3,4 m² = 34 000 cm²</p>
+        <div class="conv-scroll">
+          <table class="conv-table" style="margin-bottom:14px;">
+            <thead><tr><th colspan="2">km²</th><th colspan="2">hm²</th><th colspan="2">dam²</th><th colspan="2">m²</th><th colspan="2">dm²</th><th colspan="2">cm²</th><th colspan="2">mm²</th></tr></thead>
+            <tbody><tr>
+              <td></td><td></td>  <td></td><td></td>  <td></td><td></td>
+              <td class="hi" style="position:relative;">3<span style="position:absolute;bottom:4px;right:-4px;font-size:12px;color:var(--teal);font-weight:700;z-index:2;line-height:1;">,</span></td><td></td>
+              <td class="hi">4</td><td class="hi2">0</td>
+              <td class="hi2">0</td><td class="hi2">0</td>
+              <td></td><td></td>
+            </tr></tbody>
+          </table>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:-10px;margin-bottom:10px;">Le chiffre 3 est dans la 1ʳᵉ colonne de m², le chiffre 4 dans la 2ᵉ colonne → on lit 34 000 cm²</p>
+
+        <!-- c) 81,3 km² = 813 000 dam² -->
+        <p style="margin-bottom:6px;font-family:'DM Mono';font-size:13px;color:var(--teal);">c) 81,3 km² = 813 000 dam²</p>
+        <div class="conv-scroll">
+          <table class="conv-table" style="margin-bottom:14px;">
+            <thead><tr><th colspan="2">km²</th><th colspan="2">hm²</th><th colspan="2">dam²</th><th colspan="2">m²</th><th colspan="2">dm²</th><th colspan="2">cm²</th><th colspan="2">mm²</th></tr></thead>
+            <tbody><tr>
+              <td class="hi">8</td><td class="hi" style="position:relative;">1<span style="position:absolute;bottom:4px;right:-4px;font-size:12px;color:var(--teal);font-weight:700;z-index:2;line-height:1;">,</span></td>
+              <td>3</td><td>0</td>
+              <td class="hi2">0</td><td class="hi2">0</td>
+              <td></td><td></td>  <td></td><td></td>  <td></td><td></td>  <td></td><td></td>
+            </tr></tbody>
+          </table>
+        </div>
+
+        <!-- d) 6,21 cm² = 0,0621 dm² : les chiffres 6 et 21 dans les 2 colonnes de cm², résultat lu dans dm² -->
+        <p style="margin-bottom:6px;font-family:'DM Mono';font-size:13px;color:var(--teal);">d) 6,21 cm² = 0,0621 dm²</p>
+        <div class="conv-scroll">
+          <table class="conv-table">
+            <thead><tr><th colspan="2">km²</th><th colspan="2">hm²</th><th colspan="2">dam²</th><th colspan="2">m²</th><th colspan="2">dm²</th><th colspan="2">cm²</th><th colspan="2">mm²</th></tr></thead>
+            <tbody><tr>
+              <td></td><td></td>  <td></td><td></td>  <td></td><td></td>  <td></td><td></td>
+              <td class="hi">0</td><td class="hi" style="position:relative;">0<span style="position:absolute;bottom:4px;right:-4px;font-size:12px;color:var(--teal);font-weight:700;z-index:2;line-height:1;">,</span></td>
+              <td></td><td class="hi2">6</td>
+              <td class="hi2">2</td><td class="hi2">1</td>
+            </tr></tbody>
+          </table>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:6px;">On lit dans dm² : 0,0621 dm² (la virgule se place entre les deux colonnes de dm², soit après le 2ᵉ zéro)</p>
+      </div>
+
+      <div class="card ctip">
+        <p><strong>Astuce :</strong> entre deux unités <em>consécutives</em> d'aire, on multiplie ou divise toujours par <strong>100</strong> (et non 10, car l'aire est une surface à 2 dimensions).</p>
+        <p style="margin-top:6px;font-family:'DM Mono';font-size:13px;">1 m = 10 dm &nbsp;→&nbsp; 1 m² = 10 × 10 = <span style="color:var(--amber);">100 dm²</span></p>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S3 : RECTANGLE, CARRÉ, TRIANGLE RECTANGLE -->
+    <div class="section" id="s3">
+      <div class="sec-hdr">
+        <div class="sec-n">03</div>
+        <div>
+          <div class="sec-title">Aire du rectangle, du carré et du triangle rectangle</div>
+          <div class="sec-sub">Les trois formules fondamentales</div>
+        </div>
+      </div>
+
+      <div class="fbox">
+        <div class="fcard">
+          <div class="fcard-title">Rectangle</div>
+          <svg width="160" height="105" viewBox="0 0 160 105" style="margin:8px auto;display:block;">
+            <rect x="20" y="18" width="110" height="56" class="shape-rect"/>
+            <polyline points="20,28 30,28 30,18" fill="none" stroke="var(--teal)" stroke-width="1"/>
+            <polyline points="120,18 120,28 130,28" fill="none" stroke="var(--teal)" stroke-width="1"/>
+            <polyline points="20,64 30,64 30,74" fill="none" stroke="var(--teal)" stroke-width="1"/>
+            <polyline points="120,64 120,74 130,74" fill="none" stroke="var(--teal)" stroke-width="1"/>
+            <!-- flèche longueur (sous la figure) -->
+            <line x1="20" y1="84" x2="130" y2="84" stroke="var(--teal)" stroke-width="1.2"/>
+            <line x1="20" y1="81" x2="20" y2="87" stroke="var(--teal)" stroke-width="1.2"/>
+            <line x1="130" y1="81" x2="130" y2="87" stroke="var(--teal)" stroke-width="1.2"/>
+            <text x="75" y="98" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--teal);">Longueur L</text>
+            <!-- flèche largeur (à gauche de la figure) -->
+            <line x1="8" y1="18" x2="8" y2="74" stroke="var(--sky)" stroke-width="1.2"/>
+            <line x1="5" y1="18" x2="11" y2="18" stroke="var(--sky)" stroke-width="1.2"/>
+            <line x1="5" y1="74" x2="11" y2="74" stroke="var(--sky)" stroke-width="1.2"/>
+            <text x="4" y="48" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--sky);" transform="rotate(-90,4,48)">Largeur l</text>
+          </svg>
+          <div class="fcard-formula">Aire = L × l</div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Carré</div>
+          <svg width="110" height="100" viewBox="0 0 110 100" style="margin:8px auto;display:block;">
+            <rect x="15" y="8" width="70" height="70" class="shape-sq"/>
+            <polyline points="15,18 25,18 25,8" fill="none" stroke="var(--sky)" stroke-width="1"/>
+            <polyline points="75,8 75,18 85,18" fill="none" stroke="var(--sky)" stroke-width="1"/>
+            <polyline points="15,68 25,68 25,78" fill="none" stroke="var(--sky)" stroke-width="1"/>
+            <polyline points="75,68 75,78 85,78" fill="none" stroke="var(--sky)" stroke-width="1"/>
+            <!-- flèche côté -->
+            <line x1="15" y1="90" x2="85" y2="90" stroke="var(--sky)" stroke-width="1.2"/>
+            <line x1="15" y1="87" x2="15" y2="93" stroke="var(--sky)" stroke-width="1.2"/>
+            <line x1="85" y1="87" x2="85" y2="93" stroke="var(--sky)" stroke-width="1.2"/>
+            <text x="50" y="100" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--sky);">Côté c</text>
+          </svg>
+          <div class="fcard-formula">Aire = c × c = c²</div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Triangle rectangle</div>
+          <svg width="110" height="100" viewBox="0 0 110 100" style="margin:8px auto;display:block;">
+            <polygon points="15,80 15,12 85,80" class="shape-tri"/>
+            <polyline points="15,70 25,70 25,80" fill="none" stroke="var(--violet)" stroke-width="1"/>
+            <!-- flèche base -->
+            <line x1="15" y1="92" x2="85" y2="92" stroke="var(--violet)" stroke-width="1.2"/>
+            <line x1="15" y1="89" x2="15" y2="95" stroke="var(--violet)" stroke-width="1.2"/>
+            <line x1="85" y1="89" x2="85" y2="95" stroke="var(--violet)" stroke-width="1.2"/>
+            <text x="50" y="101" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--violet);">Base B</text>
+            <!-- flèche hauteur -->
+            <line x1="5" y1="12" x2="5" y2="80" stroke="var(--rose)" stroke-width="1.2"/>
+            <line x1="2" y1="12" x2="8" y2="12" stroke="var(--rose)" stroke-width="1.2"/>
+            <line x1="2" y1="80" x2="8" y2="80" stroke="var(--rose)" stroke-width="1.2"/>
+            <text x="3" y="50" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--rose);" transform="rotate(-90,3,50)">Hauteur h</text>
+          </svg>
+          <div class="fcard-formula">Aire = (B × h) ÷ 2</div>
+        </div>
+      </div>
+
+      <div class="card cex">
+        <p style="margin-bottom:14px;"><strong>Exemple :</strong> Calculer l'aire de la figure suivante (un carré avec un coin découpé).</p>
+        <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center;">
+          <div style="text-align:center;">
+            <svg width="160" height="140" viewBox="0 0 160 140">
+              <!-- Carré 4cm × 4cm → 80px × 80px, avec coin découpé -->
+              <!-- triangle découpé : coin haut-droit 1×1cm = 20×20px -->
+              <polygon points="15,10 115,10 115,30 135,30 135,110 15,110"
+                fill="rgba(94,184,255,0.15)" stroke="var(--sky)" stroke-width="1.5"/>
+              <!-- tic marks angles droits -->
+              <polyline points="15,20 25,20 25,10" fill="none" stroke="var(--sky)" stroke-width="1"/>
+              <polyline points="15,100 25,100 25,110" fill="none" stroke="var(--sky)" stroke-width="1"/>
+              <polyline points="125,110 125,100 135,100" fill="none" stroke="var(--sky)" stroke-width="1"/>
+              <polyline points="125,30 125,40 115,40" fill="none" stroke="var(--sky)" stroke-width="1"/>
+              <!-- triangle découpé en haut à droite -->
+              <polygon points="115,10 135,10 135,30"
+                fill="rgba(255,107,138,0.18)" stroke="var(--rose)" stroke-width="1.5" stroke-dasharray="4,2"/>
+              <!-- angle droit du triangle -->
+              <polyline points="125,10 125,20 135,20" fill="none" stroke="var(--rose)" stroke-width="1"/>
+              <!-- labels -->
+              <text x="65" y="7" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">4 cm</text>
+              <text x="8" y="65" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);" transform="rotate(-90,8,65)">4 cm</text>
+              <text x="125" y="7" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--rose);">1</text>
+              <text x="140" y="22" text-anchor="start" style="font-family:'DM Mono';font-size:9px;fill:var(--rose);">1</text>
+              <!-- flèche longueur bas -->
+              <line x1="15" y1="120" x2="135" y2="120" stroke="var(--muted)" stroke-width="1"/>
+              <line x1="15" y1="117" x2="15" y2="123" stroke="var(--muted)" stroke-width="1"/>
+              <line x1="135" y1="117" x2="135" y2="123" stroke="var(--muted)" stroke-width="1"/>
+              <text x="75" y="133" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">Le côté découpé = 1 cm</text>
+            </svg>
+          </div>
+          <div style="flex:1;min-width:200px;">
+            <div class="steps">
+              <div class="sr">
+                <div class="slbl" style="color:var(--sky);">Carré 4×4 cm</div>
+                <div class="seq"><span class="h">c² = 4² = 16 cm²</span></div>
+              </div>
+              <div class="sr">
+                <div class="slbl" style="color:var(--rose);">Triangle découpé</div>
+                <div class="seq"><span class="h">(1×1) ÷ 2 = 0,5 cm²</span></div>
+              </div>
+              <div class="sr">
+                <div class="slbl">Aire totale</div>
+                <div class="seq"><span class="ok">16 − 0,5 = 15,5 cm²</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S4 : AIRE DU DISQUE -->
+    <div class="section" id="s4">
+      <div class="sec-hdr">
+        <div class="sec-n">04</div>
+        <div>
+          <div class="sec-title">Aire du disque</div>
+          <div class="sec-sub">La formule avec π (pi)</div>
+        </div>
+      </div>
+
+      <div class="card chist">
+        <p style="margin-bottom:6px;"><strong>Archimède</strong> (−287, −212) fut certainement le plus grand mathématicien de l'Antiquité. Il donna une approximation très précise de π : <strong>3,14185</strong>.</p>
+        <p>Il inventa des machines de guerre lors du siège de Syracuse. Une légende raconte sa mort tragique : troublé par un soldat romain alors qu'il traçait des cercles, il aurait répondu <em>« Tu déranges mes cercles »</em>. Le soldat, vexé, le tua.</p>
+      </div>
+
+      <div class="fbox">
+        <div class="fcard" style="flex:1;min-width:200px;">
+          <div class="fcard-title">Le Disque</div>
+          <svg width="100" height="100" viewBox="0 0 100 100" style="margin:8px auto;display:block;">
+            <circle cx="50" cy="50" r="42" class="shape-circ"/>
+            <line x1="50" y1="50" x2="92" y2="50" stroke="var(--lime)" stroke-width="1.5"/>
+            <text x="72" y="45" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--lime);">Rayon r</text>
+            <circle cx="50" cy="50" r="2.5" fill="var(--lime)"/>
+          </svg>
+          <div class="fcard-formula" style="color:var(--lime);">Aire = π × r × r = πr²</div>
+          <div class="fcard-formula2">π ≈ 3,14</div>
+        </div>
+        <div class="fcard" style="flex:1;min-width:200px;">
+          <div class="fcard-title">Le Cercle (périmètre)</div>
+          <svg width="100" height="100" viewBox="0 0 100 100" style="margin:8px auto;display:block;">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="var(--muted)" stroke-width="2"/>
+            <line x1="50" y1="50" x2="92" y2="50" stroke="var(--muted)" stroke-width="1.2"/>
+            <text x="72" y="45" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--muted);">Rayon r</text>
+            <circle cx="50" cy="50" r="2.5" fill="var(--muted)"/>
+          </svg>
+          <div class="fcard-formula" style="color:var(--muted);">Longueur = 2πr</div>
+          <div class="fcard-formula2" style="color:var(--muted);font-size:11px;">← c'est le périmètre, pas l'aire !</div>
+        </div>
+      </div>
+
+      <div class="card cwarn">
+        <p><strong>⚠ Ne pas confondre !</strong></p>
+        <p style="font-family:'DM Mono';font-size:13px;margin-top:6px;">
+          Aire du disque : <span style="color:var(--lime);">A = π × r²</span> &nbsp;(en cm<strong>²</strong>)<br>
+          Longueur du cercle : <span style="color:var(--muted);">P = 2 × π × r</span> &nbsp;(en cm)
+        </p>
+      </div>
+
+      <div class="card cex">
+        <p style="margin-bottom:14px;"><strong>Exemples :</strong></p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div>
+            <p style="margin-bottom:6px;font-size:13px;color:var(--soft);">1) Disque de rayon 4 cm :</p>
+            <div class="steps" style="margin:0;">
+              <div class="sr"><div class="slbl">Formule</div><div class="seq"><span class="h">A = π × r²</span></div></div>
+              <div class="sr"><div class="slbl">Calcul</div><div class="seq">A ≈ 3,14 × 4²</div></div>
+              <div class="sr"><div class="slbl">Résultat</div><div class="seq"><span class="ok">A ≈ 50,24 cm²</span></div></div>
+            </div>
+          </div>
+          <div>
+            <p style="margin-bottom:6px;font-size:13px;color:var(--soft);">2) Demi-disque de diamètre 3 cm :</p>
+            <div class="steps" style="margin:0;">
+              <div class="sr"><div class="slbl">Rayon</div><div class="seq">r = 3 ÷ 2 = 1,5 cm</div></div>
+              <div class="sr"><div class="slbl">Formule</div><div class="seq"><span class="h">A = π × r² ÷ 2</span></div></div>
+              <div class="sr"><div class="slbl">Résultat</div><div class="seq"><span class="ok">A ≈ 3,5325 cm²</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card clife">
+        <p><strong>Application réelle :</strong> une pizza ronde de diamètre 30 cm (rayon = 15 cm) a une aire de π × 15² ≈ <strong>706,5 cm²</strong>. Une pizza de diamètre 20 cm n'a qu'une aire de π × 10² ≈ 314 cm². La grande est donc plus de <strong>2 fois plus grande</strong> !</p>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S5 : PARALLÉLOGRAMME & TRIANGLE -->
+    <div class="section" id="s5">
+      <div class="sec-hdr">
+        <div class="sec-n">05</div>
+        <div>
+          <div class="sec-title">Aire du parallélogramme et du triangle</div>
+          <div class="sec-sub">Base × Hauteur, et sa moitié</div>
+        </div>
+      </div>
+
+      <div class="fbox">
+        <div class="fcard">
+          <div class="fcard-title">Parallélogramme</div>
+          <svg width="140" height="90" viewBox="0 0 140 90" style="margin:8px auto;display:block;">
+            <!-- parallélogramme décalé -->
+            <polygon points="25,15 115,15 125,70 35,70" class="shape-para"/>
+            <!-- hauteur en pointillé -->
+            <line x1="35" y1="15" x2="35" y2="70" stroke="var(--amber)" stroke-width="1.2" stroke-dasharray="4,3"/>
+            <polyline points="35,24 45,24 45,15" fill="none" stroke="var(--amber)" stroke-width="1"/>
+            <!-- flèche base -->
+            <line x1="35" y1="80" x2="125" y2="80" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="35" y1="77" x2="35" y2="83" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="125" y1="77" x2="125" y2="83" stroke="var(--amber)" stroke-width="1.2"/>
+            <text x="80" y="90" text-anchor="middle" style="font-family:'DM Mono';font-size:10px;fill:var(--amber);">Base B</text>
+            <!-- label hauteur -->
+            <text x="30" y="46" text-anchor="end" style="font-family:'DM Mono';font-size:10px;fill:var(--amber);">h</text>
+          </svg>
+          <div class="fcard-formula">Aire = B × h</div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Triangle (quelconque)</div>
+          <svg width="140" height="115" viewBox="0 0 140 115" style="margin:8px auto;display:block;">
+            <polygon points="15,88 118,88 55,12" class="shape-tri"/>
+            <!-- hauteur en pointillé -->
+            <line x1="55" y1="12" x2="55" y2="88" stroke="var(--rose)" stroke-width="1.2" stroke-dasharray="4,3"/>
+            <polyline points="55,79 65,79 65,88" fill="none" stroke="var(--rose)" stroke-width="1"/>
+            <!-- flèche base -->
+            <line x1="15" y1="100" x2="118" y2="100" stroke="var(--violet)" stroke-width="1.2"/>
+            <line x1="15" y1="97" x2="15" y2="103" stroke="var(--violet)" stroke-width="1.2"/>
+            <line x1="118" y1="97" x2="118" y2="103" stroke="var(--violet)" stroke-width="1.2"/>
+            <text x="66" y="112" text-anchor="middle" style="font-family:'DM Mono';font-size:11px;fill:var(--violet);">Base B</text>
+            <!-- label hauteur à gauche -->
+            <text x="42" y="55" text-anchor="middle" style="font-family:'DM Mono';font-size:11px;fill:var(--rose);">h</text>
+          </svg>
+          <div class="fcard-formula">Aire = (B × h) ÷ 2</div>
+        </div>
+      </div>
+
+      <div class="card ctip">
+        <p><strong>Pourquoi ÷ 2 pour le triangle ?</strong> Tout triangle peut être vu comme exactement la moitié d'un parallélogramme. L'aire du triangle est donc la moitié de B × h.</p>
+      </div>
+
+      <div class="card cex">
+        <p style="margin-bottom:14px;"><strong>Exemple 1 :</strong> Parallélogramme ABCD — base AB = 6 cm, hauteur = 3 cm.</p>
+        <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center;">
+          <div style="text-align:center;">
+            <svg width="160" height="100" viewBox="0 0 160 100">
+              <polygon points="20,80 120,80 140,20 40,20" class="shape-para"/>
+              <!-- hauteur -->
+              <line x1="75" y1="20" x2="75" y2="80" stroke="var(--teal)" stroke-width="1.2" stroke-dasharray="4,3"/>
+              <polyline points="75,71 85,71 85,80" fill="none" stroke="var(--teal)" stroke-width="1"/>
+              <!-- labels -->
+              <text x="70" y="7" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">D</text>
+              <text x="145" y="18" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">C</text>
+              <text x="14" y="86" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">A</text>
+              <text x="120" y="88" style="font-family:'DM Mono';font-size:9px;fill:var(--muted);">B</text>
+              <text x="80" y="55" text-anchor="start" style="font-family:'DM Mono';font-size:9px;fill:var(--teal);">3 cm</text>
+              <text x="100" y="93" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--amber);">6 cm</text>
+              <!-- flèche base -->
+              <line x1="20" y1="93" x2="120" y2="93" stroke="var(--amber)" stroke-width="1"/>
+              <line x1="20" y1="90" x2="20" y2="96" stroke="var(--amber)" stroke-width="1"/>
+              <line x1="120" y1="90" x2="120" y2="96" stroke="var(--amber)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div style="flex:1;min-width:180px;">
+            <div class="steps">
+              <div class="sr"><div class="slbl">Formule</div><div class="seq"><span class="h">Aire = B × h</span></div></div>
+              <div class="sr"><div class="slbl">Calcul</div><div class="seq">Aire = 6 × 3</div></div>
+              <div class="sr"><div class="slbl">Résultat</div><div class="seq"><span class="ok">Aire = 18 cm²</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-bottom:14px;margin-top:20px;"><strong>Exemple 2 :</strong> Triangle de base 5 cm et hauteur 4 cm.</p>
+        <div class="steps">
+          <div class="sr"><div class="slbl">Formule</div><div class="seq"><span class="h">Aire = (B × h) ÷ 2</span></div></div>
+          <div class="sr"><div class="slbl">Calcul</div><div class="seq">Aire = (5 × 4) ÷ 2 = 20 ÷ 2</div></div>
+          <div class="sr"><div class="slbl">Résultat</div><div class="seq"><span class="ok">Aire = 10 cm²</span></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S6 : FIGURES COMPLEXES -->
+    <div class="section" id="s6">
+      <div class="sec-hdr">
+        <div class="sec-n">06</div>
+        <div>
+          <div class="sec-title">Figures complexes</div>
+          <div class="sec-sub">Décomposer pour mieux calculer</div>
+        </div>
+      </div>
+
+      <p>Quand une figure est complexe (trapèze, croix, forme irrégulière…), on la <strong>découpe en figures simples</strong> dont on connaît les formules d'aire.</p>
+
+      <div class="card cmet">
+        <ul class="cl">
+          <li><span class="cn">1</span><span>Identifier les formes simples : rectangles, triangles, demi-disques…</span></li>
+          <li><span class="cn">2</span><span>Calculer l'aire de <strong>chaque partie</strong> séparément.</span></li>
+          <li><span class="cn">3</span><span><strong>Additionner</strong> (ou soustraire si une partie est enlevée) toutes les aires.</span></li>
+        </ul>
+      </div>
+
+      <!-- Exemple figure avec demi-disque -->
+      <div class="card cex">
+        <p style="margin-bottom:14px;"><strong>Exemple 1 :</strong> Rectangle avec un demi-disque collé sur un côté.</p>
+        <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:center;">
+          <div style="text-align:center;">
+            <svg width="180" height="130" viewBox="0 0 180 130">
+              <!-- rectangle 5×3 cm → 100×60px -->
+              <rect x="15" y="35" width="100" height="60" fill="rgba(94,184,255,0.15)" stroke="var(--sky)" stroke-width="1.5"/>
+              <polyline points="15,45 25,45 25,35" fill="none" stroke="var(--sky)" stroke-width="1"/>
+              <polyline points="15,85 25,85 25,95" fill="none" stroke="var(--sky)" stroke-width="1"/>
+              <!-- demi-disque sur côté droit : rayon = 30px = 1,5 cm -->
+              <path d="M 115,35 A 30,30 0 0,1 115,95" fill="rgba(168,255,110,0.15)" stroke="var(--lime)" stroke-width="1.5"/>
+              <!-- rayon tracé -->
+              <line x1="115" y1="65" x2="145" y2="65" stroke="var(--lime)" stroke-width="1" stroke-dasharray="3,2"/>
+              <!-- labels -->
+              <text x="65" y="28" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--sky);">5 cm</text>
+              <text x="8" y="67" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--sky);" transform="rotate(-90,8,67)">3 cm</text>
+              <!-- r label au-dessus du rayon -->
+              <text x="130" y="60" text-anchor="middle" style="font-family:'DM Mono';font-size:9px;fill:var(--lime);">r = 1,5 cm</text>
+              <!-- lettres R et D -->
+              <text x="55" y="68" text-anchor="middle" style="font-family:'DM Mono';font-size:14px;font-weight:700;fill:rgba(94,184,255,0.8);">R</text>
+              <text x="148" y="68" text-anchor="start" style="font-family:'DM Mono';font-size:14px;font-weight:700;fill:rgba(168,255,110,0.8);">D</text>
+            </svg>
+          </div>
+          <div style="flex:1;min-width:180px;">
+            <div class="steps">
+              <div class="sr"><div class="slbl" style="color:var(--sky);">Rectangle R</div><div class="seq"><span class="h">5 × 3 = 15 cm²</span></div></div>
+              <div class="sr"><div class="slbl" style="color:var(--lime);">Demi-disque D</div><div class="seq"><span class="h">(π × 1,5²) ÷ 2 ≈ 3,53 cm²</span></div></div>
+              <div class="sr"><div class="slbl">Aire totale</div><div class="seq"><span class="ok">15 + 3,53 ≈ 18,53 cm²</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S7 : ERREURS À ÉVITER -->
+    <div class="section" id="s7">
+      <div class="sec-hdr">
+        <div class="sec-n">07</div>
+        <div>
+          <div class="sec-title">Erreurs à éviter</div>
+          <div class="sec-sub">Les pièges les plus fréquents en 5ème</div>
+        </div>
+      </div>
+
+      <div class="card cwarn">
+        <p style="margin-bottom:8px;"><strong>Erreur n°1 :</strong> Confondre rayon et diamètre.</p>
+        <p style="font-family:'DM Mono';font-size:13px;">❌  Disque de diamètre 6 cm → A = π × 6² <span style="color:var(--rose);">(faux !)</span></p>
+        <p style="font-family:'DM Mono';font-size:13px;margin-top:4px;">✅  Rayon = 6 ÷ 2 = 3 cm → A = π × <span style="color:var(--teal);">3²</span> ≈ 28,26 cm²</p>
+      </div>
+
+      <div class="card cwarn">
+        <p style="margin-bottom:8px;"><strong>Erreur n°2 :</strong> Confondre aire du disque et longueur du cercle.</p>
+        <p style="font-family:'DM Mono';font-size:13px;">❌  Aire = 2πr &nbsp;<span style="color:var(--rose);">(c'est la circonférence !)</span></p>
+        <p style="font-family:'DM Mono';font-size:13px;margin-top:4px;">✅  Aire = <span style="color:var(--teal);">πr²</span> &nbsp;(avec r au carré)</p>
+      </div>
+
+      <div class="card cwarn">
+        <p style="margin-bottom:8px;"><strong>Erreur n°3 :</strong> Utiliser la mauvaise hauteur pour le triangle ou le parallélogramme.</p>
+        <p style="font-size:13px;color:var(--soft);">La hauteur est toujours <strong>perpendiculaire</strong> à la base. Ce n'est pas forcément un côté de la figure.</p>
+        <p style="font-family:'DM Mono';font-size:13px;margin-top:4px;">❌  Aire triangle = (base × côté oblique) ÷ 2 <span style="color:var(--rose);">(faux !)</span></p>
+        <p style="font-family:'DM Mono';font-size:13px;margin-top:4px;">✅  Aire triangle = (base × <span style="color:var(--teal);">hauteur perpendiculaire</span>) ÷ 2</p>
+      </div>
+
+      <div class="card cwarn">
+        <p style="margin-bottom:8px;"><strong>Erreur n°4 :</strong> Oublier l'unité carrée.</p>
+        <p style="font-family:'DM Mono';font-size:13px;">❌  Aire = 28,26 <span style="color:var(--rose);">(sans unité)</span></p>
+        <p style="font-family:'DM Mono';font-size:13px;margin-top:4px;">✅  Aire = 28,26 <span style="color:var(--teal);">cm²</span></p>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S8 : EXERCICES -->
+    <div class="section" id="s8">
+      <div class="sec-hdr">
+        <div class="sec-n">08</div>
+        <div>
+          <div class="sec-title">Exercices</div>
+          <div class="sec-sub">Entraînement progressif</div>
+        </div>
+      </div>
+
+      <!-- Exercice 1 -->
+      <div class="exblk">
+        <div class="exhdr">
+          <div class="extitle">Exercice 1 — Périmètres</div>
+          <span class="badge beasy">Facile</span>
+        </div>
+        <div class="exbody">
+          <ul class="exol">
+            <li><span class="exnum">a)</span>Calcule le périmètre d'un rectangle de longueur 7 cm et largeur 4 cm.</li>
+            <li><span class="exnum">b)</span>Calcule le périmètre d'un carré de côté 5,5 cm.</li>
+            <li><span class="exnum">c)</span>Calcule la longueur d'un cercle de rayon 6 cm. (π ≈ 3,14)</li>
+            <li><span class="exnum">d)</span>Calcule le périmètre d'un losange de côté 4,2 cm.</li>
+          </ul>
+          <button class="corrBtn" onclick="tc('corr1',this)">Voir la correction</button>
+          <div id="corr1" class="corrPanel">
+            <div class="cl2"><span class="cn2">a)</span><span class="ce">P = 2×7 + 2×4 = 14 + 8 = 22 cm</span></div>
+            <div class="cl2"><span class="cn2">b)</span><span class="ce">P = 4 × 5,5 = 22 cm</span></div>
+            <div class="cl2"><span class="cn2">c)</span><span class="ce">P = 2 × 3,14 × 6 ≈ 37,68 cm</span></div>
+            <div class="cl2"><span class="cn2">d)</span><span class="ce">P = 4 × 4,2 = 16,8 cm</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercice 2 -->
+      <div class="exblk">
+        <div class="exhdr">
+          <div class="extitle">Exercice 2 — Conversions d'unités</div>
+          <span class="badge beasy">Facile</span>
+        </div>
+        <div class="exbody">
+          <ul class="exol">
+            <li><span class="exnum">a)</span>Convertis 4,7 m² en dm².</li>
+            <li><span class="exnum">b)</span>Convertis 850 cm² en dm².</li>
+            <li><span class="exnum">c)</span>Convertis 2 km² en hm².</li>
+            <li><span class="exnum">d)</span>Convertis 0,35 m² en cm².</li>
+          </ul>
+          <button class="corrBtn" onclick="tc('corr2',this)">Voir la correction</button>
+          <div id="corr2" class="corrPanel">
+            <div class="cl2"><span class="cn2">a)</span><span class="ce">4,7 × 100 = 470 dm²</span></div>
+            <div class="cl2"><span class="cn2">b)</span><span class="ce">850 ÷ 100 = 8,5 dm²</span></div>
+            <div class="cl2"><span class="cn2">c)</span><span class="ce">2 × 100 = 200 hm²</span></div>
+            <div class="cl2"><span class="cn2">d)</span><span class="ce">0,35 × 10 000 = 3 500 cm²</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercice 3 -->
+      <div class="exblk">
+        <div class="exhdr">
+          <div class="extitle">Exercice 3 — Aires de figures simples</div>
+          <span class="badge bmid">Moyen</span>
+        </div>
+        <div class="exbody">
+          <ul class="exol">
+            <li><span class="exnum">a)</span>Calcule l'aire d'un triangle de base 8 cm et de hauteur 5 cm.</li>
+            <li><span class="exnum">b)</span>Calcule l'aire d'un parallélogramme de base 9 cm et de hauteur 4 cm.</li>
+            <li><span class="exnum">c)</span>Calcule l'aire d'un disque de rayon 5 cm. (π ≈ 3,14)</li>
+            <li><span class="exnum">d)</span>Calcule l'aire d'un demi-disque de diamètre 8 cm. (π ≈ 3,14)</li>
+          </ul>
+          <button class="corrBtn" onclick="tc('corr3',this)">Voir la correction</button>
+          <div id="corr3" class="corrPanel">
+            <div class="cl2"><span class="cn2">a)</span><span class="ce">(8 × 5) ÷ 2 = 40 ÷ 2 = 20 cm²</span></div>
+            <div class="cl2"><span class="cn2">b)</span><span class="ce">9 × 4 = 36 cm²</span></div>
+            <div class="cl2"><span class="cn2">c)</span><span class="ce">3,14 × 5² = 3,14 × 25 = 78,5 cm²</span></div>
+            <div class="cl2"><span class="cn2">d)</span><span class="ce">r = 4 cm → (3,14 × 4²) ÷ 2 = 50,24 ÷ 2 = 25,12 cm²</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercice 4 -->
+      <div class="exblk">
+        <div class="exhdr">
+          <div class="extitle">Exercice 4 — Figure complexe</div>
+          <span class="badge bhard">Difficile</span>
+        </div>
+        <div class="exbody">
+          <p style="margin-bottom:12px;">Un stade d'athlétisme est composé d'un rectangle central de 100 m × 60 m et de deux demi-cercles de diamètre 60 m (un à chaque extrémité).</p>
+          <ul class="exol">
+            <li><span class="exnum">1)</span>Calcule l'aire du rectangle central.</li>
+            <li><span class="exnum">2)</span>Les deux demi-cercles forment un cercle complet : calcule son aire. (r = 30 m, π ≈ 3,14)</li>
+            <li><span class="exnum">3)</span>Donne l'aire totale du stade.</li>
+          </ul>
+          <button class="corrBtn" onclick="tc('corr4',this)">Voir la correction</button>
+          <div id="corr4" class="corrPanel">
+            <div class="cl2"><span class="cn2">1)</span><span class="ce">100 × 60 = 6 000 m²</span></div>
+            <div class="cl2"><span class="cn2">2)</span><span class="ce">3,14 × 30² = 3,14 × 900 = 2 826 m²</span></div>
+            <div class="cl2"><span class="cn2">3)</span><span class="ce" style="color:var(--teal);font-weight:600;">6 000 + 2 826 = 8 826 m²</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S9 : ENTRAÎNEMENT ALÉATOIRE -->
+    <div class="section" id="s9">
+      <div class="sec-hdr">
+        <div class="sec-n">09</div>
+        <div>
+          <div class="sec-title">Entraînement aléatoire</div>
+          <div class="sec-sub">Un nouveau calcul à chaque fois</div>
+        </div>
+      </div>
+
+      <p>Génère un calcul au hasard, essaie de trouver le résultat, puis vérifie ta réponse.</p>
+
+      <div class="rand-box">
+        <div class="rand-display" id="randDisplay">Clique sur « Générer » pour commencer !</div>
+        <div class="rand-btns">
+          <button class="rand-btn" onclick="newRand()">▶ Générer aléatoirement</button>
+          <button class="rand-btn" onclick="showRandCorr()" style="border-color:var(--teal);color:var(--teal);">Voir la correction</button>
+        </div>
+        <div class="rand-corr" id="randCorr"></div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S10 : QUIZ -->
+    <div class="section" id="s10">
+      <div class="sec-hdr">
+        <div class="sec-n">10</div>
+        <div>
+          <div class="sec-title">Quiz final</div>
+          <div class="sec-sub">10 questions pour tester tes connaissances</div>
+        </div>
+      </div>
+
+      <div id="qcontainer"></div>
+      <button class="qsubmit" id="qsubmit" onclick="submitQ()">✓ Valider mes réponses</button>
+      <div class="qresult" id="qresult">
+        <div class="rscore" id="rscore"></div>
+        <div class="rbar"><div class="rbarfill" id="rbarfill" style="width:0%"></div></div>
+        <div class="rmsg" id="rmsg"></div>
+        <button class="rand-btn" style="margin-top:16px;" onclick="restartQ()">↺ Recommencer</button>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- S11 : SYNTHÈSE -->
+    <div class="section" id="s11">
+      <div class="sec-hdr">
+        <div class="sec-n">11</div>
+        <div>
+          <div class="sec-title">Synthèse — Toutes les formules</div>
+          <div class="sec-sub">À apprendre par cœur</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:14px 18px;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--violet);margin-bottom:10px;">PÉRIMÈTRES</div>
+          <div style="font-family:'DM Mono';font-size:12.5px;line-height:2.2;color:var(--txt);">
+            Rectangle : P = 2L + 2l<br>
+            Carré : P = 4c<br>
+            Losange : P = 4c<br>
+            Cercle : P = 2πr
+          </div>
+        </div>
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:14px 18px;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px;">AIRES</div>
+          <div style="font-family:'DM Mono';font-size:12.5px;line-height:2.2;color:var(--txt);">
+            Rectangle : A = L × l<br>
+            Carré : A = c²<br>
+            Triangle : A = (B × h) ÷ 2<br>
+            Parallélogramme : A = B × h<br>
+            Disque : A = πr²
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:14px 18px;margin-top:12px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:10px;">CONVERSIONS — Entre unités consécutives d'aire</div>
+        <div style="font-family:'DM Mono';font-size:12.5px;line-height:2;color:var(--txt);">
+          Vers une unité plus petite → <span style="color:var(--teal);">× 100</span><br>
+          Vers une unité plus grande → <span style="color:var(--rose);">÷ 100</span><br>
+          Ordre : km² → hm² → dam² → m² → dm² → cm² → mm²
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- FEEDBACK -->
+    <div class="section" id="sfeedback">
+      <div class="sec-hdr">
+        <div class="sec-n" style="color:var(--amber);background:var(--amber-d);border-color:var(--amber-b);">✦</div>
+        <div>
+          <div class="sec-title">Votre avis</div>
+          <div class="sec-sub">Aidez-nous à améliorer ce cours</div>
+        </div>
+      </div>
+
+      <form id="feedbackForm" action="https://formspree.io/f/placeholder" method="POST">
+        <p style="margin-bottom:14px;">Quelle note donnez-vous à ce cours ?</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+          <label><input type="radio" name="note" value="1" style="display:none;" onchange="highlightNote(this)"><span class="note-chip">😞 1</span></label>
+          <label><input type="radio" name="note" value="2" style="display:none;" onchange="highlightNote(this)"><span class="note-chip">😐 2</span></label>
+          <label><input type="radio" name="note" value="3" style="display:none;" onchange="highlightNote(this)"><span class="note-chip">🙂 3</span></label>
+          <label><input type="radio" name="note" value="4" style="display:none;" onchange="highlightNote(this)"><span class="note-chip">😊 4</span></label>
+          <label><input type="radio" name="note" value="5" style="display:none;" onchange="highlightNote(this)"><span class="note-chip">🤩 5</span></label>
+        </div>
+        <textarea class="fb-textarea" name="message" rows="4" placeholder="Un commentaire, une suggestion, une erreur repérée ?"></textarea>
+        <button type="submit" class="fb-submit">Envoyer</button>
+        <div id="feedbackOk" style="display:none;margin-top:12px;color:var(--teal);font-size:14px;">✓ Merci pour votre retour !</div>
+      </form>
+    </div>
+
+  </div><!-- .content -->
+</div><!-- .main -->
+
+<script>
+// ─── NAV ACTIVE ───
+const secs = document.querySelectorAll('.section');
+const nlinks = document.querySelectorAll('.nlink');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      nlinks.forEach(n => n.classList.remove('on'));
+      const a = document.querySelector('.nlink[href="#' + e.target.id + '"]');
+      if (a) a.classList.add('on');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+secs.forEach(s => obs.observe(s));
+
+// ─── CORRECTION TOGGLE ───
+function tc(id, btn) {
+  const p = document.getElementById(id);
+  const isOn = p.classList.contains('on');
+  p.classList.toggle('on');
+  btn.textContent = isOn ? 'Voir la correction' : 'Masquer la correction';
+}
+
+// ─── ENTRAÎNEMENT ALÉATOIRE ───
+let rType=null, rL=null, rl=null, rAns=null;
+
+function fmtNum(n) {
+  // Format number French-style, trim trailing zeros
+  if (Number.isInteger(n)) return String(n);
+  return n.toFixed(4).replace(/\.?0+$/, '').replace('.', ',');
+}
+
+function newRand() {
+  const types = ['rectangle','carre','triangle','parallelogramme','disque','conversion'];
+  rType = types[Math.floor(Math.random()*types.length)];
+  const d = document.getElementById('randDisplay');
+  const rc = document.getElementById('randCorr');
+  rc.classList.remove('on'); rc.innerHTML = '';
+
+  if (rType === 'rectangle') {
+    rL = Math.floor(Math.random()*8)+2;
+    rl = Math.floor(Math.random()*6)+1;
+    rAns = rL * rl;
+    d.textContent = 'Aire d\'un rectangle : longueur ' + rL + ' cm, largeur ' + rl + ' cm = ?';
+  } else if (rType === 'carre') {
+    rL = Math.floor(Math.random()*8)+2;
+    rAns = rL * rL;
+    d.textContent = 'Aire d\'un carré de côté ' + rL + ' cm = ?';
+  } else if (rType === 'triangle') {
+    rL = Math.floor(Math.random()*10)+2;
+    rl = Math.floor(Math.random()*8)+2;
+    rAns = (rL * rl) / 2;
+    d.textContent = 'Aire d\'un triangle : base ' + rL + ' cm, hauteur ' + rl + ' cm = ?';
+  } else if (rType === 'parallelogramme') {
+    rL = Math.floor(Math.random()*10)+2;
+    rl = Math.floor(Math.random()*6)+1;
+    rAns = rL * rl;
+    d.textContent = 'Aire d\'un parallélogramme : base ' + rL + ' cm, hauteur ' + rl + ' cm = ?';
+  } else if (rType === 'disque') {
+    rL = Math.floor(Math.random()*6)+1;
+    rAns = Math.round(3.14 * rL * rL * 100) / 100;
+    d.textContent = 'Aire d\'un disque de rayon ' + rL + ' cm = ? (π ≈ 3,14)';
+  } else {
+    // conversion
+    const units = ['m² en dm²', 'dm² en cm²', 'cm² en dm²', 'dm² en m²', 'km² en hm²'];
+    const ut = units[Math.floor(Math.random()*units.length)];
+    rL = Math.floor(Math.random()*9)+1;
+    const from = ut.split(' en ')[0];
+    const to   = ut.split(' en ')[1];
+    const multiply = (from==='m²'&&to==='dm²')||(from==='dm²'&&to==='cm²')||(from==='km²'&&to==='hm²');
+    rAns = multiply ? rL * 100 : rL / 100;
+    d.textContent = 'Convertis : ' + rL + ' ' + from + ' = ? ' + to;
+    rType = 'conv_' + ut;
+  }
+}
+
+function showRandCorr() {
+  if (!rType) { newRand(); return; }
+  const el = document.getElementById('randCorr');
+  let html = '';
+
+  if (rType === 'rectangle') {
+    html = '<div class="cl2"><span class="cn2">Formule</span><span class="ce">L × l = ' + rL + ' × ' + rl + '</span></div>';
+    html += '<div class="cl2"><span class="cn2">Résultat</span><span class="ce" style="color:var(--teal);font-weight:600;">' + fmtNum(rAns) + ' cm²</span></div>';
+  } else if (rType === 'carre') {
+    html = '<div class="cl2"><span class="cn2">Formule</span><span class="ce">c² = ' + rL + ' × ' + rL + '</span></div>';
+    html += '<div class="cl2"><span class="cn2">Résultat</span><span class="ce" style="color:var(--teal);font-weight:600;">' + fmtNum(rAns) + ' cm²</span></div>';
+  } else if (rType === 'triangle') {
+    html = '<div class="cl2"><span class="cn2">Formule</span><span class="ce">(B × h) ÷ 2 = (' + rL + ' × ' + rl + ') ÷ 2</span></div>';
+    html += '<div class="cl2"><span class="cn2">Résultat</span><span class="ce" style="color:var(--teal);font-weight:600;">' + fmtNum(rAns) + ' cm²</span></div>';
+  } else if (rType === 'parallelogramme') {
+    html = '<div class="cl2"><span class="cn2">Formule</span><span class="ce">B × h = ' + rL + ' × ' + rl + '</span></div>';
+    html += '<div class="cl2"><span class="cn2">Résultat</span><span class="ce" style="color:var(--teal);font-weight:600;">' + fmtNum(rAns) + ' cm²</span></div>';
+  } else if (rType === 'disque') {
+    html = '<div class="cl2"><span class="cn2">Formule</span><span class="ce">π × r² = 3,14 × ' + rL + '² = 3,14 × ' + (rL*rL) + '</span></div>';
+    html += '<div class="cl2"><span class="cn2">Résultat</span><span class="ce" style="color:var(--teal);font-weight:600;">' + fmtNum(rAns) + ' cm²</span></div>';
+  } else {
+    // conversion — exact key match to avoid substring bugs
+    const convKey = rType.replace('conv_', '');
+    const from = convKey.split(' en ')[0];
+    const to   = convKey.split(' en ')[1];
+    const isMultiply = convKey === 'm² en dm²' || convKey === 'dm² en cm²' || convKey === 'km² en hm²';
+    const op = isMultiply ? '× 100' : '÷ 100';
+    html = '<div class="cl2"><span class="cn2">Opération</span><span class="ce">' + rL + ' ' + op + '</span></div>';
+    html += '<div class="cl2"><span class="cn2">Résultat</span><span class="ce" style="color:var(--teal);font-weight:600;">' + fmtNum(rAns) + ' ' + to + '</span></div>';
+  }
+  el.innerHTML = html;
+  el.classList.add('on');
+}
+
+// ─── QUIZ ───
+const QD = [
+  {q:'Périmètre d\'un rectangle de longueur 9 cm et largeur 3 cm ?', opts:['12 cm','24 cm','27 cm','36 cm'], ans:1},
+  {q:'Aire d\'un triangle de base 6 cm et hauteur 4 cm ?', opts:['24 cm²','10 cm²','12 cm²','48 cm²'], ans:2},
+  {q:'Aire d\'un disque de rayon 3 cm ? (π ≈ 3,14)', opts:['9,42 cm²','18,84 cm²','28,26 cm²','56,52 cm²'], ans:2},
+  {q:'1 m² est égal à combien de cm² ?', opts:['100 cm²','1 000 cm²','10 000 cm²','100 000 cm²'], ans:2},
+  {q:'Convertis 5 dm² en cm²', opts:['50 cm²','500 cm²','5 000 cm²','0,05 cm²'], ans:1},
+  {q:'Aire d\'un parallélogramme de base 7 cm et hauteur 3 cm ?', opts:['10 cm²','21 cm²','42 cm²','10,5 cm²'], ans:1},
+  {q:'Longueur d\'un cercle de rayon 5 cm ? (π ≈ 3,14)', opts:['15,7 cm','31,4 cm','78,5 cm','157 cm'], ans:1},
+  {q:'Un disque a un diamètre de 10 cm. Quelle est son aire ? (π ≈ 3,14)', opts:['31,4 cm²','78,5 cm²','314 cm²','157 cm²'], ans:1},
+  {q:'Convertis 250 cm² en dm²', opts:['2,5 dm²','25 dm²','0,25 dm²','2 500 dm²'], ans:0},
+  {q:'Figure composée d\'un rectangle (longueur 6 cm, largeur 4 cm) et d\'un triangle (base 4 cm, hauteur 3 cm) collés. Quelle est l\'aire totale ?', opts:['24 cm²','30 cm²','36 cm²','48 cm²'], ans:1},
+];
+
+let UA = new Array(QD.length).fill(null), done = false;
+
+function buildQ() {
+  const c = document.getElementById('qcontainer');
+  c.innerHTML=''; UA=new Array(QD.length).fill(null); done=false;
+  document.getElementById('qresult').classList.remove('on');
+  document.getElementById('qsubmit').disabled=false;
+  QD.forEach((item,qi)=>{
+    const d=document.createElement('div');
+    d.className='qblk';
+    d.innerHTML='<div class="qtext">Q'+(qi+1)+'. <span class="qeq">'+item.q+'</span></div>';
+    const opts=document.createElement('div');
+    opts.className='qopts';
+    item.opts.forEach((o,oi)=>{
+      const b=document.createElement('button');
+      b.className='qopt'; b.textContent=o;
+      b.onclick=()=>{
+        if(done)return;
+        UA[qi]=oi;
+        opts.querySelectorAll('.qopt').forEach(x=>x.classList.remove('sel'));
+        b.classList.add('sel');
+      };
+      opts.appendChild(b);
+    });
+    d.appendChild(opts); c.appendChild(d);
+  });
+}
+
+function submitQ() {
+  if(done)return; done=true; let score=0;
+  QD.forEach((item,qi)=>{
+    const opts=document.querySelectorAll('#qcontainer .qblk')[qi].querySelectorAll('.qopt');
+    opts.forEach((b,oi)=>{
+      b.disabled=true;
+      if(oi===item.ans) b.classList.add('good');
+      else if(oi===UA[qi]) b.classList.add('bad');
+    });
+    if(UA[qi]===item.ans) score++;
+  });
+  const pct=Math.round(score/QD.length*100);
+  document.getElementById('rscore').textContent=score+' / '+QD.length;
+  document.getElementById('rscore').style.color=pct>=70?'var(--teal)':pct>=50?'var(--amber)':'var(--rose)';
+  document.getElementById('rbarfill').style.width=pct+'%';
+  document.getElementById('rbarfill').style.background=pct>=70?'var(--teal)':pct>=50?'var(--amber)':'var(--rose)';
+  document.getElementById('rmsg').textContent=
+    pct===100?'Score parfait ! Périmètres et aires n\'ont plus de secrets pour toi !' :
+    pct>=80?'Très bien ! Quelques formules à revoir.' :
+    pct>=60?'Pas mal — relis bien les formules du disque et du triangle.' :
+    pct>=40?'Il faut retravailler le cours, notamment les formules et conversions.' :
+    'Relis le cours depuis le début, étape par étape. Tu vas y arriver !';
+  const re=document.getElementById('qresult');
+  re.style.background=pct>=70?'var(--teal-d)':pct>=50?'var(--amber-d)':'var(--rose-d)';
+  re.style.border='1px solid '+(pct>=70?'var(--teal-b)':pct>=50?'var(--amber-b)':'var(--rose-b)');
+  re.classList.add('on');
+  document.getElementById('qsubmit').disabled=true;
+}
+
+function restartQ(){buildQ();}
+buildQ();
+
+// ─── FEEDBACK ───
+function highlightNote(radio) {
+  document.querySelectorAll('.note-chip').forEach(c => {
+    c.style.borderColor='var(--border)'; c.style.color='var(--soft)'; c.style.background='var(--s2)';
+  });
+  const chip=radio.nextElementSibling;
+  chip.style.borderColor='var(--amber-b)'; chip.style.color='var(--amber)'; chip.style.background='var(--amber-d)';
+}
+
+const feedbackForm=document.getElementById('feedbackForm');
+if(feedbackForm){
+  feedbackForm.addEventListener('submit',async function(e){
+    e.preventDefault();
+    const btn=feedbackForm.querySelector('button[type=submit]');
+    btn.textContent='Envoi en cours...'; btn.disabled=true;
+    try {
+      const res=await fetch(feedbackForm.action,{method:'POST',body:new FormData(feedbackForm),headers:{'Accept':'application/json'}});
+      if(res.ok){feedbackForm.reset();document.querySelectorAll('.note-chip').forEach(c=>{c.style.borderColor='var(--border)';c.style.color='var(--soft)';c.style.background='var(--s2)';});document.getElementById('feedbackOk').style.display='block';btn.style.display='none';}
+      else{btn.textContent='Erreur — réessayez';btn.disabled=false;}
+    } catch{btn.textContent='Erreur — réessayez';btn.disabled=false;}
+  });
+}
+</script>
+</body>
+</html>
